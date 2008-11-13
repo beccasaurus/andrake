@@ -1,32 +1,17 @@
-package com.android.basicui;
+// package com.android.basicui; <--- not necessary, auto-added to all activities
 
-import android.app.Activity;
+// import android.app.Activity; <-- not necessary
+
+// short version
+import_android view.View, content.Intent, os.Bundle, widget.*
+
+/* long version:
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
-
-// this helps with listeners, etc:
-// http://www.anddev.org/basics_for_using_radio_buttons__buttons__message_box-t857.html
-
-/*
-   Dialog foo = new AlertDialog.Builder(BasicUI.this)
-   .setTitle("title")
-   .setMessage("messsage!")
-   .create();
-   foo.show();
-
-//.setIcon(R.drawable.icon)
-//.setTitle(R.string.about_dialog_title)
-//.setPositiveButton(R.string.about_dialog_ok, null)
 */
-
-//import android.app.AlertDialog;
-//import android.app.Dialog;
-//import android.app.ProgressDialog;
-//import android.content.DialogInterface; // showAlert
-//import android.content.Context;
 
 public class BasicUI extends Activity implements OnClickListener {
 	private static final int ACTIVITY_EDIT=1;

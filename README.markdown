@@ -22,3 +22,7 @@ TODO
  * create specs that take some `config.rb` files and confirm the output matches some `AndroidManifest.xml` files
  * create specs that some some `AndroidManifest.xml` files (from above) and confirm that the objects load properly
  * ... create MORE specs!
+ * Test jirb (JRuby)
+ * Test accessing android.jar classes via jirb
+ * Test USING android.jar classes via jirb?  likely won't work off of Dalvik ... ?
+ * Find a way to DRY up java classes without using ERB tags ... custom parsing?  likely the best route
