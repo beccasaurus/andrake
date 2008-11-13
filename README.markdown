@@ -14,3 +14,11 @@ Say What?
 ---------
 
 Just wait until there are some examples!  You'll see  :)
+
+
+TODO
+----
+
+ * create specs that take some `config.rb` files and confirm the output matches some `AndroidManifest.xml` files
+ * create specs that some some `AndroidManifest.xml` files (from above) and confirm that the objects load properly
+ * ... create MORE specs!
