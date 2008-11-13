@@ -26,3 +26,4 @@ TODO
  * Test accessing android.jar classes via jirb
  * Test USING android.jar classes via jirb?  likely won't work off of Dalvik ... ?
  * Find a way to DRY up java classes without using ERB tags ... custom parsing?  likely the best route
+ * Try XRuby for implementing the Java in Ruby?  If this helps DRY up the Java, then it's worth it.  It might be worth it to do it in a custom way, tho ... dunno yet!
