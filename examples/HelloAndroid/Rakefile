@@ -1,0 +1,9 @@
+# Rakefile for testing / prototyping the creation of HelloAndroid from Andrake
+require File.dirname(__FILE__) + '/../../lib/andrake'
+
+desc 'build the app'
+task :build do
+  puts "Building Andrake App ..."
+  @app = Andrake::App.new File.dirname(__FILE__)
+  puts "... DONE!"
+end
