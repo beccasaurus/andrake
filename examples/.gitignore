@@ -1,0 +1,7 @@
+bin
+
+*.ap_
+*.apk
+*.class
+*.dex
+*.zip
