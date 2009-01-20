@@ -81,6 +81,8 @@ class Andrake::App
     end
     puts "Creating new build ..."
     FileUtils.mkdir path('.app')
+    FileUtils.mkdir path('.app', 'bin')
+    FileUtils.mkdir path('.app', 'libs')
     File.open( path('.app', 'AndroidManifest.xml'), 'w') {|f| f << manifest_xml }
     
     FileUtils.mkdir path('.app', 'res') # should dynamically create the directories under res ...
@@ -103,6 +105,12 @@ class Andrake::App
                       name.downcase, "#{activity.name}.java"), 'w' ) do |f|
         f << activity.source
       end
+    end
+
+    # finally, for now, let's copy over andrake/res to the directory
+    # so we get an Ant script and stuff like that
+    Dir[ File.join(File.dirname(__FILE__), '..', 'res', '*') ].each do |static_resource|
+      FileUtils.cp static_resource, path('.app', File.basename(static_resource))
     end
   end
 end
