@@ -1,0 +1,19 @@
+# some example rake tasks - prototyping!
+require 'fileutils'
+ROOT   = File.expand_path File.dirname('.')
+RES    = File.join ROOT, 'res'
+VALUES = File.join RES, 'values'
+
+require File.join ROOT, 'init'
+
+namespace :res do
+
+desc 'regenerate res/values'
+  task :values do
+    FileUtils.rm_r  VALUES
+    FileUtils.mkdir VALUES
+    xml = File.join VALUES, 'values.xml'
+    File.open(xml, 'w'){|f| f << Andrake.resources.to_xml }
+  end
+
+end

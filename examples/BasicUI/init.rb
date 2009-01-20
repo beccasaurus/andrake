@@ -1,7 +1,7 @@
 #! /usr/bin/env ruby
 require 'andrake'
 
-Andrake.resources[:colors][:blue] = '#0000ff'
+Andrake.resources[:colors][:blue] = '#666'
 # Andrake.resources.colors.blue = '#0000ff'
 
 Andrake.resources do |res|
@@ -22,5 +22,3 @@ Andrake.resources[:strings][:externalized_string] = 'Externalized String'
 Andrake.resources do |res|
   res.strings :externalized_string => 'overriden external string'
 end
-
-puts Andrake.resources.to_xml
