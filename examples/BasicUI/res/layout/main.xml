@@ -13,8 +13,8 @@
     android:layout_width="fill_parent" 
     android:layout_height="wrap_content" 
     android:text="@string/externalized_string"
-    android:background="@color/white"
-    android:textColor="@color/red"
+    android:background="@color/blue"
+    android:textColor="@color/white"
     android:id="@+id/txt"
     />
 <Button android:layout_width="100px"
