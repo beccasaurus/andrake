@@ -5,7 +5,7 @@
   <color name="green">#f0f0</color>
   <color name="blue">#666</color>
   <color name="yellow">#ffffff00</color>
-  <string name="hello">Hello World from a Ruby Hash</string>
-  <string name="app_name">Basic UI</string>
+  <string name="app_name">I Can Haz Test?</string>
   <string name="externalized_string">overriden external string</string>
+  <string name="hello">Hello World from Andrake</string>
 </resources>

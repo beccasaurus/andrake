@@ -29,6 +29,29 @@ class Andrake::App
     end
   end
 
+  # outputs the AndroidManifest.xml
+  def manifest_xml
+    require 'builder'
+    builder = Builder::XmlMarkup.new :indent => 2
+    builder.instruct! :xml, :version => '1.0', :encoding => 'utf-8'
+    builder.manifest  'xmlns:android' => 'http://schemas.android.com/apk/res/android',
+                      'package' => "com.andrake_testing.#{name.downcase}",
+                      'android:versionCode' => '1',
+                      'android:versionName' => '1.0.0' do |man|
+      man.application 'android:label' => '@string/app_name' do |app|
+        activities.each do |activity|
+          app.activity 'android:name' => ".#{activity.name}", 'android:label' => '@string/app_name' do |act|
+            # should do these only if the activity is the main activity
+            act.tag! 'intent-filter' do |intent|
+              intent.action   'android:name' => 'android.intent.action.MAIN'
+              intent.category 'android:name' => 'android.intent.category.LAUNCHER'
+            end
+          end
+        end
+      end
+    end
+  end
+
   def resources *args
     @resources ||= Andrake::ResourceManager.new
     yield(@resources) if block_given?
@@ -58,6 +81,7 @@ class Andrake::App
     end
     puts "Creating new build ..."
     FileUtils.mkdir path('.app')
+    File.open( path('.app', 'AndroidManifest.xml'), 'w') {|f| f << manifest_xml }
     
     FileUtils.mkdir path('.app', 'res') # should dynamically create the directories under res ...
     FileUtils.mkdir path('.app', 'res', 'layout')
