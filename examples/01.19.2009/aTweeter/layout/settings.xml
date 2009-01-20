@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >		
+	<ScrollView android:layout_width="fill_parent" 
+		android:layout_height="fill_parent">
+	    <LinearLayout android:layout_width="fill_parent" 
+	    	android:layout_height="fill_parent"
+	    	android:orientation="vertical">
+	    	<LinearLayout android:orientation="horizontal"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content">
+				<TextView android:layout_width="wrap_content"
+					android:layout_height="wrap_content" 
+					android:text="@string/txtUsername" />
+				<EditText android:id="@+id/username" 
+			  		android:layout_width="wrap_content"
+					android:layout_height="wrap_content" 
+					android:layout_weight="1"/>
+			</LinearLayout>
+			<LinearLayout android:orientation="horizontal"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content">	
+				<TextView android:layout_width="wrap_content"
+					android:layout_height="wrap_content" 
+					android:text="@string/txtPassword" />
+				<EditText android:id="@+id/password" 
+				  	android:layout_width="wrap_content"
+					android:layout_height="wrap_content" 
+					android:layout_weight="1"
+					android:password="true" />		
+			</LinearLayout>
+			<LinearLayout android:layout_width="wrap_content" 
+				android:layout_height="wrap_content">
+				<TextView android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/txtCache" />
+				<Button android:id="@+id/btnClearCache"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/btnClearCache" />
+			</LinearLayout>
+			<LinearLayout android:layout_width="wrap_content" 
+				android:layout_height="wrap_content">
+				<RadioGroup android:layout_width="wrap_content" 
+					android:layout_height="wrap_content">
+					<RadioButton android:id="@+id/rbOnPhone" 
+						android:layout_width="wrap_content" 
+						android:layout_height="wrap_content" 
+						android:text="@string/option_save_phone" />
+					<RadioButton android:id="@+id/rbOnSD" 
+						android:layout_width="wrap_content" 
+						android:layout_height="wrap_content" 
+						android:text="@string/option_save_sdcard" />
+				</RadioGroup>
+			</LinearLayout>
+			<LinearLayout android:orientation="horizontal"
+				android:id="@+id/llOnSd"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content">
+				<TextView android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/txtPathSD" />
+				<EditText android:id="@+id/etSdSavePath" 
+					android:layout_width="fill_parent" 
+					android:layout_height="wrap_content"
+					android:hint="@string/hintSDSavePath" />
+			</LinearLayout>
+			<LinearLayout android:layout_width="fill_parent"
+				android:layout_height="wrap_content">
+				<TextView android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/txtNumberToKeep" />
+				<EditText android:id="@+id/etNumberToKeep" 
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content" 
+					android:numeric="integer" />
+			</LinearLayout>
+			<LinearLayout android:layout_width="fill_parent"
+				android:layout_height="wrap_content">
+				<TextView android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/txtAutoUpdateDelay" />				
+				<Spinner android:id="@+id/spnAutoUpdateDelay" 
+					android:layout_width="wrap_content" 
+					android:layout_height="wrap_content" />
+			</LinearLayout>
+			
+			<CheckBox android:id="@+id/chkAutoTranslate" 
+				android:layout_width="wrap_content" 
+				android:layout_height="wrap_content" 
+				android:text="@string/chkAutoTranslate" />
+			<CheckBox android:id="@+id/chkAutoFetch" 
+				android:layout_width="wrap_content" 
+				android:layout_height="wrap_content" 
+				android:text="@string/chkAutoFetch"/>
+				
+			<RelativeLayout android:layout_width="fill_parent"
+				android:layout_height="wrap_content">
+				<Button android:id="@+id/btnCancel" 
+		  			android:text="@string/btnCancel"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"  />
+				<Button android:id="@+id/btnConfirm" 
+		  			android:text="@string/btnConfirm"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content" 
+					android:layout_alignParentRight="true" />				
+			</RelativeLayout>	    		
+		</LinearLayout>	
+	</ScrollView>
+</LinearLayout>

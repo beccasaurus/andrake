@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" 
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	<ScrollView 
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content">
+		<RelativeLayout 
+			android:orientation="vertical"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content">
+			<TextView android:id="@+id/txtName"
+				android:layout_width="wrap_content" 
+				android:layout_height="wrap_content"
+				 android:layout_centerHorizontal="true" />
+			<ImageView android:id="@+id/imgAvatar" 
+				android:src="@drawable/default_avatar" 
+				android:layout_width="wrap_content" 
+				android:layout_height="wrap_content"
+				android:layout_below="@id/txtName"
+				android:layout_alignParentLeft="true" />
+			<TextView android:id="@+id/txtDescription"
+				android:layout_width="wrap_content" 
+				android:layout_height="wrap_content" 
+				android:layout_below="@id/txtName" 
+				android:paddingRight="5px" 
+		    	android:paddingBottom="3px" 
+		    	android:paddingLeft="3px" 
+		    	android:layout_marginLeft="2px" 
+				android:layout_toRightOf="@id/imgAvatar" />
+			<TextView android:id="@+id/txtUrl"
+				android:layout_width="wrap_content" 
+				android:layout_height="wrap_content"
+				android:layout_below="@id/imgAvatar"
+				android:autoLink="web"
+				android:paddingBottom="5px" />
+			<TextView android:id="@+id/txtlocation"
+				android:layout_width="wrap_content" 
+				android:layout_height="wrap_content"
+				android:layout_below="@id/txtUrl" 
+				android:clickable="true"
+				android:paddingBottom="10px" />
+			<Button android:id="@+id/btnBack"
+				android:layout_width="wrap_content" 
+				android:layout_height="wrap_content"
+				android:layout_below="@id/txtlocation"
+				android:layout_alignParentLeft="true"
+				android:text="@string/btnBack"/>
+			<Button android:id="@+id/btnFriend"
+				android:layout_width="wrap_content" 
+				android:layout_height="wrap_content"
+				android:layout_below="@id/txtlocation"
+				android:layout_alignParentRight="true"
+				android:text="@string/btnFriend" />
+		</RelativeLayout>
+	</ScrollView>
+</LinearLayout>
