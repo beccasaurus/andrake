@@ -5,5 +5,6 @@ desc 'build the app'
 task :build do
   puts "Building Andrake App ..."
   @app = Andrake::App.new File.dirname(__FILE__)
+  @app.build
   puts "... DONE!"
 end
