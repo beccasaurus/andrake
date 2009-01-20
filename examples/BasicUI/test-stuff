@@ -6,8 +6,6 @@ Andrake.resources[:colors][:blue] = '#0000ff'
 
 Andrake.resources do |res|
 
-  puts "block called!"
-
   res[:strings].merge!({
     :hello => 'Hello World from a Ruby Hash',
     :app_name => 'Basic UI'
@@ -25,5 +23,4 @@ Andrake.resources do |res|
   res.strings :externalized_string => 'overriden external string'
 end
 
-puts "Andrake.resources.to_xml"
 puts Andrake.resources.to_xml

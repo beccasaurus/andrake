@@ -1,4 +1,6 @@
 # Andrake Testing - Super Insanely Simple Prototype!
+require 'rubygems'
+require 'activeresource' # replace with thin extlib
 
 class Andrake
   class << self
@@ -35,8 +37,20 @@ class Andrake::ResourceManager
     end
   end
 
+  # this is pretty icky, but it's just a prototype!
   def to_xml
-    require 'yaml'
-    puts resources.to_yaml
+    require 'builder'
+    builder = Builder::XmlMarkup.new :indent => 2
+    builder.instruct! :xml, :version => '1.0', :encoding => 'utf-8'
+    builder.resources do |res|
+      resources.each  do |type, values|
+        type = type.to_s.singularize
+        values.each   do |value|
+          name, value = value.first, value.last
+          eval "res.#{type} #{value.inspect}, :name => #{name.inspect}"
+        end
+      end
+    end
   end
+
 end
