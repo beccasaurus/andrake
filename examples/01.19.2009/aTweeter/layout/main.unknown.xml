@@ -1,0 +1,58 @@
+# SASS
+
+LinearLayout
+  :orientation vertical
+  :layout_width fill_parent
+  :layout_height fill_parent
+
+.horizontal
+  :orientation horizontal
+
+#status
+  :layout_width wrap_content
+
+# HAML
+
+!!! XML
+%LinearLayout
+  %LinearLayout.horizontal
+    %EditText#status
+		<EditText android:id="@+id/status" 
+		  android:layout_width="wrap_content"
+			android:layout_height="wrap_content" 
+			android:layout_weight="1" 
+			android:hint="@string/hintStatus" 
+			android:scrollHorizontally="true" 
+			android:singleLine="true" 
+			android:autoText="true" 
+			android:nextFocusDown="@+id/send" 
+			android:nextFocusRight="@+id/send" 
+			android:layout_marginLeft="3px" 
+			android:layout_marginTop="3px"/>
+		<LinearLayout android:layout_width="wrap_content"
+			android:layout_height="wrap_content" 
+			android:orientation="vertical">
+			<Button android:id="@+id/send" 
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content" 
+				android:text="@string/btnSend" 
+				android:layout_marginTop="3px"/>
+			<TextView android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:id="@+id/number" 
+				android:text="140"/>
+		</LinearLayout>
+		<ImageButton android:id="@+id/btnPicture" 
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content" 
+				android:src="@drawable/photo" 
+				android:paddingLeft="5px" 
+				android:paddingRight="5px"
+				android:paddingTop="5px" 
+				android:background="#000" 
+				android:layout_marginTop="3px"/>
+	</LinearLayout>
+	<ListView android:id="@id/android:list"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"/>
+</LinearLayout>
