@@ -1,4 +1,4 @@
-package com.android.helloagain;
+package com.andrake_testing.helloandroid;
 
 import android.app.Activity;
 import android.os.Bundle;

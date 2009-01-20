@@ -1,6 +1,6 @@
 #! /bin/bash
-adb uninstall com.android.basicui
+adb uninstall com.andrake_testing.helloandroid
 rm -rv bin
 ant
 adb install bin/AndroidSansEclipse-debug.apk
-adb shell am start -n com.android.basicui/com.android.basicui.BasicUI
+adb shell am start -n com.andrake_testing.helloandroid/com.andrake_testing.helloandroid.AndroidSansEclipse
