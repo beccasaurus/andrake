@@ -1,12 +1,12 @@
 $:.unshift File.dirname(__FILE__)
-%w( rubygems ).each {|lib| require lib }
+%w( rubygems activeresource ).each {|lib| require lib }
 
 class Andrake
 
 end
 
 class Andrake::App
-  attr_accessor :root, :name, :activities
+  attr_accessor :root, :name, :activities, :resources
 
   def initialize root_directory
     @root = root_directory
@@ -14,8 +14,6 @@ class Andrake::App
     @activities ||= []
     init
     find_activities
-
-    puts "#{name} loaded with #{activities.length} activities: #{ activities.map {|a| a.name}.inspect }"
   end
 
   # finds and runs the application's initialization code
@@ -29,6 +27,12 @@ class Andrake::App
         break
       end
     end
+  end
+
+  def resources *args
+    @resources ||= Andrake::ResourceManager.new
+    yield(@resources) if block_given?
+    @resources
   end
 
   # finds activities for the app and concats them into #activities
@@ -47,6 +51,31 @@ class Andrake::App
   # build or 'compile' the Andrake app down to a 'typical' Android app
   def build
     puts "Building #{name} ..."
+    require 'fileutils'
+    if File.directory? path('.app')
+      puts "Removing old build ..."
+      FileUtils.rm_r path('.app')
+    end
+    puts "Creating new build ..."
+    FileUtils.mkdir path('.app')
+    
+    FileUtils.mkdir path('.app', 'res') # should dynamically create the directories under res ...
+    FileUtils.mkdir path('.app', 'res', 'layout')
+    FileUtils.mkdir path('.app', 'res', 'values')
+
+    File.open( path('.app', 'res', 'values', 'values.xml'), 'w') {|f| f << resources.to_xml }
+
+    FileUtils.mkdir path('.app', 'src')
+    FileUtils.mkdir path('.app', 'src', 'com')
+    FileUtils.mkdir path('.app', 'src', 'com', 'andrake_testing')
+    FileUtils.mkdir path('.app', 'src', 'com', 'andrake_testing', name.downcase)
+
+    activities.each do |activity|
+      File.open( path('.app', 'src', 'com', 'andrake_testing', 
+                      name.downcase, "#{activity.name}.java"), 'w' ) do |f|
+        f << activity.source
+      end
+    end
   end
 end
 
@@ -81,4 +110,47 @@ class Andrake::Activity
   def self.activity_name file
     /class (\w+) extends Activity/.match(File.read(file)).captures.first
   end
+end
+
+class Andrake::ResourceManager
+  attr_accessor :resources
+
+  def resources
+    @resources ||= {}
+  end
+
+  def [] resource_name
+    resources[resource_name] ||= {}
+  end
+
+  def []= *args
+    puts "[]= #{ args.inspect }"
+  end
+
+  def method_missing name, *args
+    if args.empty?
+      self[ name ]
+    elsif args.first.is_a?Hash
+      self[ name ].merge! args.first
+    else
+      raise "not sure what to do with #{name.inspect}(#{args.inspect})"
+    end
+  end
+
+  # this is pretty icky, but it's just a prototype!
+  def to_xml
+    require 'builder'
+    builder = Builder::XmlMarkup.new :indent => 2
+    builder.instruct! :xml, :version => '1.0', :encoding => 'utf-8'
+    builder.resources do |res|
+      resources.each  do |type, values|
+        type = type.to_s.singularize
+        values.each   do |value|
+          name, value = value.first, value.last
+          eval "res.#{type} #{value.inspect}, :name => #{name.inspect}"
+        end
+      end
+    end
+  end
+
 end
