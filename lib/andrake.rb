@@ -84,10 +84,14 @@ class Andrake::App
     File.open( path('.app', 'AndroidManifest.xml'), 'w') {|f| f << manifest_xml }
     
     FileUtils.mkdir path('.app', 'res') # should dynamically create the directories under res ...
-    FileUtils.mkdir path('.app', 'res', 'layout')
     FileUtils.mkdir path('.app', 'res', 'values')
 
     File.open( path('.app', 'res', 'values', 'values.xml'), 'w') {|f| f << resources.to_xml }
+
+    # for now, just copy layout files ...
+    if File.directory? path('layout')
+      FileUtils.cp_r path('layout'), path('.app', 'res', 'layout')
+    end
 
     FileUtils.mkdir path('.app', 'src')
     FileUtils.mkdir path('.app', 'src', 'com')
