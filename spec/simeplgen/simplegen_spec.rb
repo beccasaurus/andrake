@@ -27,11 +27,16 @@ describe SimpleGen do
     File.join generation_path_root, name.to_s
   end
 
+  def clean_tmp_dir
+    FileUtils.rm_r generation_path if File.directory?(generation_path)
+  end
+
   before do
     SimpleGen.template_directories = []
     Dir[ File.join(generation_path_root, '*') ].select {|x| File.directory? x }.each do |generated_dir|
       FileUtils.rm_f generated_dir
     end
+    clean_tmp_dir
   end
 
   it 'should read available generators from template directories' do
@@ -47,12 +52,25 @@ describe SimpleGen do
   end
 
   it "should generate 'app' correctly" do
-    FileUtils.rm_r generation_path
+    clean_tmp_dir
     SimpleGen.template_directories << template_dir # template-dir1
     File.exist?(File.join(generation_path, 'foo.xml')).should be_false
     SimpleGen[:app].generate! generation_path, :var => "RUBY VARIABLE"
     File.exist?(File.join(generation_path, 'foo.xml')).should be_true
     File.read(File.join(generation_path, 'foo.xml')).should include('hello from RUBY VARIABLE')
+  end
+
+  it "should generate template/with/many/dirs/... correctly" do
+    # many_dirs => many/dirs/hello.txt.erb
+    clean_tmp_dir
+    SimpleGen.template_directories << template_dir # template-dir1
+    File.exist?(File.join(generation_path, 'many')).should be_false
+    File.exist?(File.join(generation_path, 'many', 'dirs')).should be_false
+    SimpleGen[:many_dirs].generate! generation_path
+    File.exist?(File.join(generation_path, 'many', 'dirs')).should be_true
+    File.exist?(File.join(generation_path, 'many', 'dirs', 'hello.txt')).should be_true
+    File.read(File.join(generation_path, 'many', 'dirs', 'hello.txt')).should 
+      include("x => 5")
   end
 
   it 'filter should work properly' do

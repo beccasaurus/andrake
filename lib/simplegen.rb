@@ -60,11 +60,16 @@ class SimpleGen::Template
   end
 
   def generate! root_path_for_generation = '.', variables = { }
+    puts "generate! #{ root_path_for_generation }"
     files.each do |file|
       relative_file_path = file.path.sub(root, '') # relative to the template
       relative_dirname   = ::File.dirname  relative_file_path
       dir_to_render_in   = ::File.join root_path_for_generation, relative_dirname
       file_to_render_in  = ::File.join dir_to_render_in, file.filename_to_generate
+
+      # puts "relative_file_path => #{ relative_file_path }"
+      # puts "dir_to_render_in   => #{ dir_to_render_in }"
+      # puts "file_to_render_in  => #{ file_to_render_in }"
 
       FileUtils.mkdir_p dir_to_render_in
       ::File.open( file_to_render_in, 'w' ) {|f| f << file.render(variables) }
