@@ -24,6 +24,9 @@ class Andrake::Hybrid
 
   # returns a string with information about this application
   def info
+    resource_string = andrake_app.resources.resources.keys.map do |resource_key|
+    "  #{resource_key} resources: #{ andrake_app.resources[resource_key].keys.join(', ') }"
+    end.join("\n")
     %[
 Android Application information:
 
@@ -32,6 +35,7 @@ Android Application information:
   #{activities.length} activities: #{activities.map(&:name).join(', ')}
   #{layouts.length} layouts: #{layouts.map(&:name).join(', ')}
   APK: #{apk_file}
+#{ resource_string }
 
 ]
   end

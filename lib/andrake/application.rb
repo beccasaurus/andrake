@@ -8,11 +8,33 @@ class Andrake::Application
     @activities ||= []
     init
     find_activities
+    load_xml_resources
   end
 
   # meh
   def delete_android_app
     FileUtils.rm_r path('.app') if File.directory? path('.app')
+  end
+
+  def load_xml_resources
+    values = File.join root, 'res', 'values'
+    if File.directory? values
+      require 'hpricot'
+      require 'activesupport'
+      Dir[ File.join(values, '**', '*.xml' ) ].each do |xml_resource_file|
+        puts "resource file: #{ xml_resource_file }"
+        doc = Hpricot(File.read(xml_resource_file))
+        resource_node = ( doc / 'resources' )[0]
+        resource_node.children.each do |node|
+          if node.is_a?Hpricot::Elem
+            tag_type  = node.name.pluralize
+            tag_name  = node[:name]
+            tag_value = node.innerText
+            resources[tag_type.to_sym][tag_name.to_sym] = tag_value
+          end
+        end
+      end
+    end
   end
 
   def android_app
