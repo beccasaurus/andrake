@@ -10,6 +10,7 @@ class Android::Layout
   def file_name
     File.basename file_path
   end
+  alias name file_name
 
   def self.find_all directory
     # find directories with 'layout' in the name ... really, we should just do directly to res/layout

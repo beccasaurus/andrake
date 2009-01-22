@@ -64,6 +64,73 @@ class Android::Application
     return (@build_output[1].read.include?('BUILD SUCCESSFUL')) ? true : false
   end
 
+  # returns a formatted String displaying information 
+  # about this Application
+  def info
+%{Name: #{name}
+#{classes.length} classes: #{classes.map(&:name).join(', ')}
+#{activities.length} activities: #{activities.map(&:name).join(', ')}
+#{layouts.length} layouts: #{layouts.map(&:name).join(', ')}
+APK: #{apk_file}
+}
+  end
+
+  # the MAIN Activity for this Android application
+  #
+  # TODO right now this is just getting the first Activity 
+  #      that has an intent-filter defined!
+  def main_activity
+    require 'hpricot'
+    doc = Hpricot(manifest_xml)
+    name = ( doc / :activity ).find {|activity| ( activity / 'intent-filter' )}['android:name']
+    name.sub! /^\./, ''
+    activities.find {|a| a.name == name }
+  end
+
+  def manifest_xml
+    file_path = File.join root, 'AndroidManifest.xml'
+    File.read file_path
+  end
+
+  # runs this Android application (on the default device)
+  def run
+    package = main_activity.package_name # TODO need to actually figure out which 
+    cmd = "adb shell am start -n #{package}/#{package}.#{main_activity.name}"
+    puts cmd
+    puts `#{cmd}`
+  end
+
+  # installs this Android application (on the default device)
+  def install
+    cmd = "adb install '#{apk_file}'" if apk_file
+    puts cmd
+    puts `#{cmd}`
+  end
+
+  # uninstalls this Android application (on the default device)
+  def uninstall
+    cmd = "adb uninstall #{ main_activity.package }"
+    puts cmd
+    puts `#{cmd}`
+  end
+
+  # reinstalls this Android application (on the default device)
+  def reinstall
+    uninstall
+    install
+  end
+
+  # returns true if the directory appears to be an Android application,
+  # else returns false
+  #
+  # specifically, we check to see if there's an AndroidManifest.xml
+  #
+  # TODO go up the directory tree to find a root!  go up to root 
+  #      looking for an AndroidManifest.xml
+  def self.is_application? directory
+    return File.file? File.join(directory, 'AndroidManifest.xml')
+  end
+
   protected
 
   # creates a build.xml Ant script in this Application's root directory

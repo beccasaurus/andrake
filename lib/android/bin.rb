@@ -13,7 +13,7 @@ class Android::Bin
       android command [options]
 
     Examples:
-      android ...
+      android info
 
     Further help:
       android commands         # list all available commands
@@ -23,30 +23,53 @@ class Android::Bin
 doco
   end 
 
-  def foo_help
+  def current_application
+    if Android::Application.is_application? '.'
+      Android::Application.new '.'
+    else
+      puts "Current directory doesn't appear to be the root of an Android application."
+      exit
+    end
+  end
+
+  def info_help
     <<doco
-Usage: #{ script_name } foo [OPTIONS] [THING]
-
-  Options:
-    -l, --list            List all available themes
-
-  Arguments:
-    THING                 A thing
+Usage: #{ script_name } info
 
   Summary:
-    Command for managing #{ script_name } stuff
+    Display information about the current Android application
   end
 doco
   end
-  def foo *args
-    options = {}
-    opts = OptionParser.new do |opts|
-      opts.on('-l','--list'){ options[:list] = true }
-      opts.on('-p','--path'){ options[:path] = true }
-    end
-    opts.parse! args
+  def info
+    puts current_application.info
+  end
 
-    thing = args.last
+  def build_help
+    <<doco
+Usage: #{ script_name } build
+
+  Summary:
+    build the current Android application
+  end
+doco
+  end
+  def build
+    current_application.build
+  end
+
+  def emulate_help
+    <<doco
+Usage: #{ script_name } emulate
+
+  Summary:
+    run the current Android application in the emulator
+  end
+doco
+  end
+  def emulate
+    current_application.reinstall
+    current_application.run
   end
 
 end
