@@ -14,3 +14,4 @@ end
 require 'andrake/application'
 require 'andrake/activity'
 require 'andrake/resource_manager'
+require 'andrake/hybrid'

@@ -7,13 +7,13 @@ class Andrake::Bin
   def usage *args
     puts <<doco
 
-  andrake == %{ Andrake Development Companion }
+  andrake == %{ Android Development Companion }
 
     Usage:
       andrake command [options]
 
     Examples:
-      andrake ...
+      andrake info
 
     Further help:
       andrake commands         # list all available commands
@@ -23,30 +23,17 @@ class Andrake::Bin
 doco
   end 
 
-  def foo_help
+  def info_help
     <<doco
-Usage: #{ script_name } foo [OPTIONS] [THING]
-
-  Options:
-    -l, --list            List all available themes
-
-  Arguments:
-    THING                 A thing
+Usage: #{ script_name } info
 
   Summary:
-    Command for managing #{ script_name } stuff
+    Display information about the current Android application
   end
 doco
   end
-  def foo *args
-    options = {}
-    opts = OptionParser.new do |opts|
-      opts.on('-l','--list'){ options[:list] = true }
-      opts.on('-p','--path'){ options[:path] = true }
-    end
-    opts.parse! args
-
-    thing = args.last
+  def info
+    puts Andrake::Hybrid.new.info
   end
 
 end
