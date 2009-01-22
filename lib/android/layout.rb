@@ -12,6 +12,10 @@ class Android::Layout
   end
   alias name file_name
 
+  def render stylesheets
+    File.read file_path
+  end
+
   def self.find_all directory
     # find directories with 'layout' in the name ... really, we should just do directly to res/layout
     Dir[ File.join(directory, '**', '*layout*') ].directories.inject([]) do |layouts, dir|

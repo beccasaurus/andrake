@@ -11,6 +11,10 @@ class Andrake::Application
     load_xml_resources
   end
 
+  def stylesheets
+    Dir[ File.join(root, '**', '*.css') ]
+  end
+
   # resource directories that are NOT layouts or values
   def misc_resources
     misc = Dir[ File.join(root, 'res', '*') ]
@@ -150,12 +154,9 @@ class Andrake::Application
       end
     end
 
-    # for now, just copy layout files ...
-    if File.directory? path('layout')
-      FileUtils.cp_r path('layout'), path('.app', 'res', 'layout')
-    end
-    if File.directory? path('res', 'layout')
-      FileUtils.cp_r path('res', 'layout'), path('.app', 'res', 'layout')
+    layouts.each do |layout|
+      FileUtils.mkdir_p path('.app', 'res', 'layout')
+      File.open( path('.app', 'res', 'layout', layout.name), 'w' ){|f| f << layout.render(stylesheets) }
     end
 
     classes.each do |klass|
