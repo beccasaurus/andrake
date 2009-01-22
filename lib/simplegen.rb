@@ -17,9 +17,17 @@ class SimpleGen
     # this is a Hash, key = the filter name, which will be used for the file extension, eg. 'erb'
     attr_accessor :filters
 
+    # as opposed to unix PATHs, the LAST template directory (with the same name) wins (if names conflict)
     def templates
       template_directories.inject([]) do |all_templates, template_dir|
         dirs = Dir[::File.join(template_dir, '*')].select {|x| ::File.directory? x }
+        
+        # delete templates that new templates will be overriding
+        dirs.each do |dir|
+          template_to_override = all_templates.find {|t| t.name == ::File.basename(dir) }
+          all_templates.delete template_to_override if template_to_override
+        end
+
         all_templates += dirs.map {|dir| SimpleGen::Template.new(dir) }
         all_templates
       end

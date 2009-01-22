@@ -68,6 +68,15 @@ describe SimpleGen do
     File.exist?(File.join(generation_path, 'empty_dir')).should be_true
   end
 
+  it 'templates should be override other templates' do
+    clean_tmp_dir
+    SimpleGen.template_directories << template_dir # template-dir1
+    SimpleGen.template_directories << template_dir('template-dir2') # template-dir1
+    SimpleGen[:empty_dirs].generate! generation_path
+    File.exist?(File.join(generation_path, 'empty_dir')).should be_false
+    File.exist?(File.join(generation_path, 'P0WNED')).should be_true
+  end
+
   it 'should support dynamic directory naming' do
     clean_tmp_dir
     SimpleGen.template_directories << template_dir # template-dir1
