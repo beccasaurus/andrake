@@ -57,14 +57,36 @@ class Android::Layout
   def androidify_xml_attributes xml
     require 'hpricot'
     doc = Hpricot(xml)
+
+    # make sure that something has xmlns:android="http://schemas.android.com/apk/res/android"
+    doc.traverse_element do |first_element|
+      if first_element.is_a?Hpricot::Elem
+        unless first_element.attributes.keys.include?'xmlns:android'
+          first_element.set_attribute 'xmlns:android', 'http://schemas.android.com/apk/res/android'
+        end
+        break
+      end
+    end
+
     doc.traverse_element {|e|
       if e.is_a?Hpricot::Elem
+        
+        # fix ID
+        if e.attributes.keys.include?'id'
+          id = e[:id]
+          unless id.include? '@+id/'
+            e.set_attribute 'id', "@+id/#{id}"
+          end
+        end
+
+        # fix attributes (prepend 'android:')
         e.attributes.each do |k, v|
           unless k.include?':'
             value = e.remove_attribute k
             e.set_attribute "android:#{k}", "#{value}"
           end
         end
+
       end
     }
     fix_case_sensitive_tags(doc.to_s)
@@ -91,7 +113,7 @@ class Android::Layout
   def self.find_all directory
     # find directories with 'layout' in the name ... really, we should just do directly to res/layout
     Dir[ File.join(directory, '**', '*layout*') ].directories.inject([]) do |layouts, dir|
-      layout_xml_files = Dir[ File.join(dir, '**', '*.xml') ]
+      layout_xml_files = Dir[ File.join(dir, '**', '*.xml') ] + Dir[ File.join(dir, '**', '*.haml') ]
       layouts += layout_xml_files.map { |file_path| Android::Layout.new file_path }
       layouts
     end
