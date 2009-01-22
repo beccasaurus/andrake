@@ -8,7 +8,7 @@ class JavaClass
   end
 
   def class_name
-    /public class (\w+)/.match(source_sans_comments).captures.first
+    /public .*class (\w+)/.match(source_sans_comments).captures.first
   end
   alias name class_name
 
@@ -18,7 +18,7 @@ class JavaClass
   alias package package_name
 
   def super_class
-    match = /public class \w+ extends (\w+)/.match(source_sans_comments)
+    match = /public .*class \w+ extends (\w+)/.match(source_sans_comments)
     if match then match.captures.first else nil end
   end
   alias superclass super_class

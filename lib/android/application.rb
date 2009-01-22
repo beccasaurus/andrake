@@ -22,6 +22,11 @@ class Android::Application
     classes_by_type Android::Activity
   end
 
+  # returns the resource JavaClass 'R'
+  def resource_class
+    classes.find {|klass| klass.name == 'R' }
+  end
+
   protected
 
   # returns an Array of all of this Application's

@@ -11,16 +11,21 @@ describe Android, 'HelloAndroid' do
   end
 
   it 'should have the names of the Java classes' do
-    #@app.classes.map(&:name).should include('R')
-    #@app.classes.map(&:name).should include('HelloAndroid')
+    @app.classes.map(&:name).should include('R')
+    @app.classes.map(&:name).should include('HelloAndroid')
   end
 
   it 'should have 1 Activity class' do
-    #@app.activities.length.should == 1
-    #@app.activities.first.name.should == 'HelloAndroid'
+    @app.activities.length.should == 1
+    @app.activities.first.name.should == 'HelloAndroid'
+    @app.activities.first.should be_a_kind_of(Android::Activity)
+    @app.activities.first.should be_a_kind_of(Android::JavaClass)
   end
 
-  it 'should have 1 Resource class'
+  it 'should have 1 Resource class' do
+    @app.resource_class.name.should == 'R'
+    @app.resource_class.should be_a_kind_of(Android::JavaClass)
+  end
 
   it 'should know the package names of the classes'
 
