@@ -1,6 +1,7 @@
 $:.unshift File.dirname(__FILE__)
 require 'fileutils'
 require 'javaclass' # <--- should be moved to a gem, eventually
+require 'rubygems'
 
 class Android
   def self.gem_root
