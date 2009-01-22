@@ -1,4 +1,4 @@
 TextView {
-  textColor:  @color/white;
-  background: @color/blue;
+  textColor:  @color/red;
+  background: @color/white;
 }

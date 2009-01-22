@@ -40,7 +40,7 @@ class Android::Layout
       end
     end
 
-    xml
+    doc.to_s
   end
 
   def androidify_xml_attributes xml
