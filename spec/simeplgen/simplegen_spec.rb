@@ -47,11 +47,12 @@ describe SimpleGen do
   end
 
   it "should generate 'app' correctly" do
+    FileUtils.rm_r generation_path
     SimpleGen.template_directories << template_dir # template-dir1
     File.exist?(File.join(generation_path, 'foo.xml')).should be_false
     SimpleGen[:app].generate! generation_path, :var => "RUBY VARIABLE"
-    #File.exist?(File.join(generation_path, 'foo.xml')).should be_true
-    #File.read(File.join(generation_path, 'foo.xml')).should include('hello from RUBY VARIABLE')
+    File.exist?(File.join(generation_path, 'foo.xml')).should be_true
+    File.read(File.join(generation_path, 'foo.xml')).should include('hello from RUBY VARIABLE')
   end
 
   it 'filter should work properly' do

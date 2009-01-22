@@ -60,8 +60,15 @@ class SimpleGen::Template
   end
 
   def generate! root_path_for_generation = '.', variables = { }
-    puts files_and_directories.inspect
-    puts files.inspect
+    files.each do |file|
+      relative_file_path = file.path.sub(root, '') # relative to the template
+      relative_dirname   = ::File.dirname  relative_file_path
+      dir_to_render_in   = ::File.join root_path_for_generation, relative_dirname
+      file_to_render_in  = ::File.join dir_to_render_in, file.filename_to_generate
+
+      FileUtils.mkdir_p dir_to_render_in
+      ::File.open( file_to_render_in, 'w' ) {|f| f << file.render(variables) }
+    end
   end
 
   # returns an Array of files (SimpleGen::Template::File)
@@ -142,13 +149,15 @@ class SimpleGen::Template::File
     _current_simplegen_template_file_output = source
     
     # put variables into binding, as instance variables (so they don't raise exceptions with missing)
-    b = binding
-    variables.each do |k, v|
-      eval "@#{k} = #{v}", b
-    end
+    b = lambda {
+      variables.each do |k, v|
+        instance_variable_set "@#{k}", v
+      end
+      binding
+    }
 
     filters.each do |filter|
-      _current_simplegen_template_file_output = filter.call(_current_simplegen_template_file_output, b)
+      _current_simplegen_template_file_output = filter.call(_current_simplegen_template_file_output, b.call)
     end
 
     _current_simplegen_template_file_output
