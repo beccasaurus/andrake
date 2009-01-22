@@ -24,10 +24,10 @@ class JavaClass
   alias superclass super_class
   alias parent super_class
 
-  def source
+  def source_code
     File.read file_path
   end
-  alias source_code source
+  alias source source_code
 
   def source_code_without_comments
     # regular expression to find all comments, from: http://ostermiller.org/findcomment.html

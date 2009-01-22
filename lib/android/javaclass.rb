@@ -7,22 +7,7 @@
 # .java parser or, ideally, find a well-written .java 
 # parser to take advantage of
 #
-class Android::JavaClass
-  
-  attr_accessor :file_path
-
-  def initialize file_path
-    @file_path = file_path
-  end
-
-  def name
-    parsed.class_name
-  end
-
-  def source
-    File.read file_path
-  end
-  alias source_code source
+class Android::JavaClass < JavaClass
 
   def self.find_all directory
     Dir[ File.join(directory, '**', '*.java') ].map do |file_path|
@@ -36,14 +21,6 @@ class Android::JavaClass
         Android::JavaClass.new file_path
       end
     end
-  end
-
-  protected
-
-  # returns a parsed JavaClass object with 
-  # the class name, superclass, etc etc etc
-  def parsed
-    @parsed ||= ::JavaClass.parse(file_path)
   end
 
 end

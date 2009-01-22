@@ -27,7 +27,9 @@ describe Android, 'HelloAndroid' do
     @app.resource_class.should be_a_kind_of(Android::JavaClass)
   end
 
-  it 'should know the package names of the classes'
+  it 'should know the package names of the classes' do
+    @app.activities.first.package.should == 'com.android.hello'
+  end
 
   it 'should have 1 layout'
 
