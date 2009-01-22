@@ -12,7 +12,8 @@ class Andrake::Application
   end
 
   def stylesheets
-    Dir[ File.join(root, '**', '*.css') ]
+    Dir[ File.join(root, '**', '*.css') ] +
+    Dir[ File.join(root, '**', '*.sass') ]
   end
 
   # resource directories that are NOT layouts or values

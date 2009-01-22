@@ -18,13 +18,24 @@ class Android::Layout
     layout_xml = androidify_xml_attributes(layout_xml)
   end
 
+  def read_css_file css_file
+    if css_file[/\.sass$/]
+      require 'sass'
+      Sass::Engine.new(File.read(css_file)).to_css
+    elsif css_file[/\.css$/]
+      File.read css_file
+    else
+      ""
+    end
+  end
+
   def apply_css xml, css_files
     return xml if css_files.empty?
 
     require 'css_parser'
     parser = CssParser::Parser.new
     css_files.each do |css_file|
-      parser.add_block! File.read(css_file)
+      parser.add_block! read_css_file(css_file)
     end
 
     require 'hpricot'
