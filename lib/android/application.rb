@@ -4,7 +4,7 @@
 class Android::Application
 
   # the root directory of the Application
-  attr_accessor :root
+  attr_accessor :root, :name
 
   def initialize root_directory = File.dirname(__FILE__)
     @root = File.expand_path root_directory
@@ -15,7 +15,7 @@ class Android::Application
   # currently simply returns the directory name, 
   # whereas it really should parse the AndroidManifest.xml
   def name
-    File.basename root
+    @name ||= File.basename(File.expand_path(root))
   end
 
   # returns an Array of all of this Application's 
@@ -57,7 +57,9 @@ class Android::Application
   # returns false if the APK wasn't properly created
   #
   def build
-    puts "Building #{name}"
+    puts "build"
+    self.name = File.basename(File.expand_path(File.join('.'))) if self.name == '.app'
+    puts "Building #{self.name}"
     write_build_xml_template
     check_build_dependencies
     require 'open3'
@@ -82,11 +84,31 @@ APK: #{apk_file}
   # TODO right now this is just getting the first Activity 
   #      that has an intent-filter defined!
   def main_activity
-    require 'hpricot'
-    doc = Hpricot(manifest_xml)
-    name = ( doc / :activity ).find {|activity| ( activity / 'intent-filter' )}['android:name']
-    name.sub! /^\./, ''
-    activities.find {|a| a.name == name }
+    main = ''
+    if File.file? File.join(root, 'AndroidManifest.xml')
+      puts "Getting Main Activity from AndroidManifest.xml"
+      require 'hpricot'
+      doc = Hpricot(File.read(File.join(root, 'AndroidManifest.xml')))
+      name = ''
+      ( doc / :activity ).each do |activity|
+        if ( activity / 'intent-filter' ).length > 0
+          name = activity['android:name']
+          break
+        end
+      end
+      name.sub! /^\./, ''
+      main = activities.find {|a| a.name == name }
+    else
+      puts "Trying to figure out Main Activity name"
+      main = activities.find {|a| a.name.downcase == self.name.downcase }
+      main = activities.find {|a| a.name.downcase == "#{ self.name.downcase }activity" } unless main
+      main = activities.find {|a| self.name.downcase.include? a.name.downcase } unless main
+      main = activities.find {|a| a.name.downcase.include? self.name.downcase } unless main
+      raise "Hmm ... couldn't figure out which the main activity is ... activities: #{ activities.map {|a| a.name}.inspect }" unless main
+    end
+
+    puts "Main Activity: #{ main.name }"
+    main
   end
 
   def manifest_xml
@@ -96,6 +118,9 @@ APK: #{apk_file}
 
   # runs this Android application (on the default device)
   def run
+    puts "run"
+    self.name = File.basename(File.expand_path(File.join('.'))) if self.name == '.app'
+    puts "Main Activity: #{ main_activity.name }"
     package = main_activity.package_name # TODO need to actually figure out which 
     cmd = "cd '#{root}' && adb shell am start -n #{package}/#{package}.#{main_activity.name}"
     puts cmd
@@ -105,6 +130,7 @@ APK: #{apk_file}
 
   # installs this Android application (on the default device)
   def install
+    puts "install"
     build
     cmd = "cd '#{root}' && adb install '#{apk_file}'" if apk_file
     puts cmd
@@ -114,6 +140,7 @@ APK: #{apk_file}
 
   # uninstalls this Android application (on the default device)
   def uninstall
+    puts "uninstall"
     bin_dir = File.join root, 'bin'
     FileUtils.rm_r bin_dir if File.directory? bin_dir
     cmd = "cd '#{root}' && adb uninstall #{ main_activity.package }"

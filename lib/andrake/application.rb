@@ -4,7 +4,7 @@ class Andrake::Application
 
   def initialize root_directory
     @root = root_directory
-    @name = File.basename root
+    @name = File.basename File.expand_path(root)
     @activities ||= []
     init
     find_activities
@@ -51,7 +51,9 @@ class Andrake::Application
 
   def android_app
     if File.directory? path('.app')
-      @andoid_app ||= Android::Application.new path('.app')
+      @android_app ||= Android::Application.new path('.app')
+      @android_app.name = self.name
+      @android_app
     else
       nil
     end
@@ -83,24 +85,35 @@ class Andrake::Application
 
   # outputs the AndroidManifest.xml
   def manifest_xml
+    if activities.empty?
+      raise "Whoa, there's a problem ... we don't have any activities - we can't build a manifest.  #{ File.expand_path(root) }"
+    end
     require 'builder'
     builder = Builder::XmlMarkup.new :indent => 2
     builder.instruct! :xml, :version => '1.0', :encoding => 'utf-8'
     builder.manifest  'xmlns:android' => 'http://schemas.android.com/apk/res/android',
-                      'package' => "com.andrake_testing.#{name.downcase}",
+                      'package' => main_activity.package.downcase,
                       'android:versionCode' => '1',
                       'android:versionName' => '1.0.0' do |man|
-                        man.application 'android:label' => '@string/app_name' do |app|
-                          activities.each do |activity|
-                            app.activity 'android:name' => ".#{activity.name}", 'android:label' => '@string/app_name' do |act|
-                              # should do these only if the activity is the main activity
-                              act.tag! 'intent-filter' do |intent|
-                                intent.action   'android:name' => 'android.intent.action.MAIN'
-                                intent.category 'android:name' => 'android.intent.category.LAUNCHER'
-                              end
-                            end
-                          end
-                        end
+      man.application 'android:label' => '@string/app_name' do |app|
+        activities.each do |activity|
+
+          if main_activity.name == activity.name
+
+            app.activity 'android:name' => ".#{activity.name}", 'android:label' => '@string/app_name' do |act|
+              act.tag! 'intent-filter' do |intent|
+                intent.action   'android:name' => 'android.intent.action.MAIN'
+                intent.category 'android:name' => 'android.intent.category.LAUNCHER'
+              end
+            end
+
+          else
+            app.activity 'android:name' => ".#{activity.name}" do
+            end
+          end
+
+        end
+      end
                       end
   end
 
@@ -110,12 +123,14 @@ class Andrake::Application
     @resources
   end
 
+  def main_activity
+    Android::Application.new(root).main_activity
+  end
+
   # finds activities for the app and concats them into #activities
+  # (just uses Android::Application's activities now)
   def find_activities
-    # uhhh ... activity isn't letting me add another array to it?
-    Andrake::Activity.find_all(self).each do |activity|
-      activities << activity
-    end
+    @activities = Android::Application.new(root).activities
   end
 
   # get the path to files or directories relative to #root
@@ -127,7 +142,7 @@ class Andrake::Application
   def build
     raise "You can't build an automatically generated .app directory!" if File.basename(File.dirname(path('.'))) == '.app'
 
-    puts "Building #{name} ..."
+    puts "Building App:#{name} ..."
     require 'fileutils'
     if File.directory? path('.app')
       puts "Removing old build ..."
@@ -141,6 +156,8 @@ class Andrake::Application
     if File.file? path('AndroidManifest.xml')
       FileUtils.cp path('AndroidManifest.xml'), path('.app', 'AndroidManifest.xml')
     else
+      puts "Outputting custom manifest"
+      puts "Main Activity: #{ main_activity.package }.#{ main_activity.name }"
       File.open( path('.app', 'AndroidManifest.xml'), 'w') {|f| f << manifest_xml }
     end
 
@@ -179,6 +196,7 @@ class Andrake::Application
       FileUtils.cp static_resource, path('.app', File.basename(static_resource))
     end
 
+    puts "Andrake passing build process off to Android::Application"
     puts "BUILD: #{ android_app.build.inspect }"
     android_app
   end
