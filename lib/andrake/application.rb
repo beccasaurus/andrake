@@ -23,6 +23,17 @@ class Andrake::Application
     end
   end
 
+  # returns an array of Android .java classes
+  def classes
+    Android::JavaClass.find_all root
+  end
+
+  # returns an Array of all of this Application's
+  # .xml layout files (Android::Layout)
+  def layouts
+    Android::Layout.find_all root
+  end
+
   # outputs the AndroidManifest.xml
   def manifest_xml
     require 'builder'

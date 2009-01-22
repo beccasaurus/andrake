@@ -1,4 +1,5 @@
 $:.unshift File.dirname(__FILE__)
+require 'android'
 
 class Andrake
   def self.gem_root
