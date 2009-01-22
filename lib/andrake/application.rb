@@ -142,7 +142,6 @@ class Andrake::Application
   def build
     raise "You can't build an automatically generated .app directory!" if File.basename(File.dirname(path('.'))) == '.app'
 
-    puts "Building App:#{name} ..."
     require 'fileutils'
     if File.directory? path('.app')
       puts "Removing old build ..."
@@ -156,8 +155,7 @@ class Andrake::Application
     if File.file? path('AndroidManifest.xml')
       FileUtils.cp path('AndroidManifest.xml'), path('.app', 'AndroidManifest.xml')
     else
-      puts "Outputting custom manifest"
-      puts "Main Activity: #{ main_activity.package }.#{ main_activity.name }"
+      puts "Outputting Generated AndroidManifest ..."
       File.open( path('.app', 'AndroidManifest.xml'), 'w') {|f| f << manifest_xml }
     end
 
@@ -196,7 +194,6 @@ class Andrake::Application
       FileUtils.cp static_resource, path('.app', File.basename(static_resource))
     end
 
-    puts "Andrake passing build process off to Android::Application"
     puts "BUILD: #{ android_app.build.inspect }"
     android_app
   end

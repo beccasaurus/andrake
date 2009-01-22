@@ -57,9 +57,7 @@ class Android::Application
   # returns false if the APK wasn't properly created
   #
   def build
-    puts "build"
     self.name = File.basename(File.expand_path(File.join('.'))) if self.name == '.app'
-    puts "Building #{self.name}"
     write_build_xml_template
     check_build_dependencies
     require 'open3'
@@ -86,7 +84,6 @@ APK: #{apk_file}
   def main_activity
     main = ''
     if File.file? File.join(root, 'AndroidManifest.xml')
-      puts "Getting Main Activity from AndroidManifest.xml"
       require 'hpricot'
       doc = Hpricot(File.read(File.join(root, 'AndroidManifest.xml')))
       name = ''
@@ -99,7 +96,6 @@ APK: #{apk_file}
       name.sub! /^\./, ''
       main = activities.find {|a| a.name == name }
     else
-      puts "Trying to figure out Main Activity name"
       main = activities.find {|a| a.name.downcase == self.name.downcase }
       main = activities.find {|a| a.name.downcase == "#{ self.name.downcase }activity" } unless main
       main = activities.find {|a| self.name.downcase.include? a.name.downcase } unless main
@@ -107,7 +103,6 @@ APK: #{apk_file}
       raise "Hmm ... couldn't figure out which the main activity is ... activities: #{ activities.map {|a| a.name}.inspect }" unless main
     end
 
-    puts "Main Activity: #{ main.name }"
     main
   end
 
@@ -118,9 +113,7 @@ APK: #{apk_file}
 
   # runs this Android application (on the default device)
   def run
-    puts "run"
     self.name = File.basename(File.expand_path(File.join('.'))) if self.name == '.app'
-    puts "Main Activity: #{ main_activity.name }"
     package = main_activity.package_name # TODO need to actually figure out which 
     cmd = "cd '#{root}' && adb shell am start -n #{package}/#{package}.#{main_activity.name}"
     puts cmd
@@ -130,7 +123,6 @@ APK: #{apk_file}
 
   # installs this Android application (on the default device)
   def install
-    puts "install"
     build
     cmd = "cd '#{root}' && adb install '#{apk_file}'" if apk_file
     puts cmd
@@ -140,7 +132,6 @@ APK: #{apk_file}
 
   # uninstalls this Android application (on the default device)
   def uninstall
-    puts "uninstall"
     bin_dir = File.join root, 'bin'
     FileUtils.rm_r bin_dir if File.directory? bin_dir
     cmd = "cd '#{root}' && adb uninstall #{ main_activity.package }"
