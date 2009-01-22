@@ -1,5 +1,8 @@
 $:.unshift File.dirname(__FILE__)
 require 'android'
+require 'rubygems'
+require 'activesupport' # singularize
+require 'builder'
 
 class Andrake
   def self.gem_root

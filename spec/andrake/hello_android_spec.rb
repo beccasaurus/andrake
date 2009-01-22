@@ -4,6 +4,7 @@ describe Andrake, 'HelloAndroid' do
   
   before do
     @app = Andrake::Application.new andrake_example(:HelloAndroid)
+    @app.delete_android_app if @app.android_app
   end
 
   it 'should have a name' do
@@ -23,6 +24,14 @@ describe Andrake, 'HelloAndroid' do
     @app.layouts.length.should == 1
     @app.layouts.first.should be_a_kind_of(Android::Layout)
     @app.layouts.first.file_name.should == 'main.xml'
+  end
+
+  it 'should build a Android::Application' do
+    @app.android_app.should be_nil
+    android_app = @app.build
+    @app.android_app.should_not be_nil
+    @app.android_app.should == android_app
+    android_app.apk_file.should_not be_nil
   end
 
 end

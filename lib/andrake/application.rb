@@ -10,6 +10,19 @@ class Andrake::Application
     find_activities
   end
 
+  # meh
+  def delete_android_app
+    FileUtils.rm_r path('.app') if File.directory? path('.app')
+  end
+
+  def android_app
+    if File.directory? path('.app')
+      @andoid_app ||= Android::Application.new path('.app')
+    else
+      nil
+    end
+  end
+
   # finds and runs the application's initialization code
   # (within the scope of the App)
   def init
@@ -117,6 +130,9 @@ class Andrake::Application
     Dir[ File.join(File.dirname(__FILE__), '..', 'res', '*') ].each do |static_resource|
       FileUtils.cp static_resource, path('.app', File.basename(static_resource))
     end
+
+    android_app.build
+    android_app
   end
 
 end
