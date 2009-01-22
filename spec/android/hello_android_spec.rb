@@ -4,6 +4,11 @@ describe Android, 'HelloAndroid' do
 
   before do
     @app = Android::Application.new android_example(:HelloAndroid)
+    FileUtils.rm @app.apk_file if @app.apk_file
+  end
+
+  it 'should have a name' do
+    @app.name.should == 'HelloAndroid'
   end
 
   it 'should have 2 Java classes' do
@@ -40,5 +45,11 @@ describe Android, 'HelloAndroid' do
   it 'should have string values'
 
   it 'should have 1 graphic'
+
+  it 'should be buildable' do
+    @app.apk_file.should be_nil
+    @app.build.should be_true
+    @app.apk_file.should_not be_nil
+  end
 
 end
