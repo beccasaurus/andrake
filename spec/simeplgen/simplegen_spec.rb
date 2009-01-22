@@ -62,7 +62,13 @@ describe SimpleGen do
 
   it 'should generate empty directories OK'
 
-  it 'should support dynamic directory naming' # make it create multiple dirs
+  it 'should support dynamic directory naming' do
+    clean_tmp_dir
+    SimpleGen.template_directories << template_dir # template-dir1
+    File.exist?(File.join(generation_path, '_chunky', 'bacon_', 'foo')).should be_false
+    SimpleGen[:dynamic_dirname].generate! generation_path, :dynamic => 'chunky/bacon'
+    File.exist?(File.join(generation_path, '_chunky', 'bacon_', 'foo')).should be_true
+  end
 
   it 'should suppor dynamic file naming' do
     clean_tmp_dir
