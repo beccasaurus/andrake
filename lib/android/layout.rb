@@ -14,7 +14,33 @@ class Android::Layout
 
   def render stylesheets
     layout_xml = File.read file_path
+    layout_xml = apply_css(layout_xml, stylesheets)
     layout_xml = androidify_xml_attributes(layout_xml)
+  end
+
+  def apply_css xml, css_files
+    return xml if css_files.empty?
+
+    require 'css_parser'
+    parser = CssParser::Parser.new
+    css_files.each do |css_file|
+      parser.add_block! File.read(css_file)
+    end
+
+    require 'hpricot'
+    doc = Hpricot(xml)
+    parser.each_selector do |selector, declarations, specificity|
+      doc.search(selector.downcase).each do |element|
+        if element.is_a? Hpricot::Elem
+          rules = declarations.split(';').map {|r| r.split(':').map {|x| x.strip }}
+          rules.each do |attribute, value|
+            element.set_attribute attribute, value
+          end
+        end
+      end
+    end
+
+    xml
   end
 
   def androidify_xml_attributes xml
@@ -22,14 +48,9 @@ class Android::Layout
     doc = Hpricot(xml)
     doc.traverse_element {|e|
       if e.is_a?Hpricot::Elem
-        puts e.name
         e.attributes.each do |k, v|
           unless k.include?':'
-            puts "  #{ k.inspect }"
             value = e.remove_attribute k
-            puts "value => #{value.inspect}"
-            puts "android:#{k}, #{value}"
-            puts "e.set_attribute 'android:#{k}', '#{value}'"
             e.set_attribute "android:#{k}", "#{value}"
           end
         end

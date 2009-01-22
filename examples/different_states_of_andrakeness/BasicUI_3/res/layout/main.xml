@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    layout_width="fill_parent"
+    layout_height="fill_parent"
     >
 <TextView  
-    android:layout_width="fill_parent" 
+    layout_width="fill_parent" 
     android:layout_height="wrap_content" 
-    android:text="@string/hello"
+    text="@string/hello"
     />
 <TextView  
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:text="@string/externalized_string"
-    android:background="@color/white"
-    android:textColor="@color/red"
-    android:id="@+id/txt"
+    layout_width="fill_parent" 
+    layout_height="wrap_content" 
+    text="@string/externalized_string"
+    textColor="@color/red"
+    id="@+id/txt"
     />
-<Button android:layout_width="100px"
-    android:layout_height="wrap_content" android:text="Click Me"
-    android:id="@+id/my_button" /> 
+<Button layout_width="100px"
+    layout_height="wrap_content" text="Click Me"
+    id="@+id/my_button" /> 
 </LinearLayout>
