@@ -1,1 +1,1 @@
-hello from <%= @app %>
+hello from <%= var %>
