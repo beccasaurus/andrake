@@ -14,6 +14,7 @@ class Andrake::Bin
 
     Examples:
       andrake info
+      andrake build
 
     Further help:
       andrake commands         # list all available commands
@@ -34,6 +35,19 @@ doco
   end
   def info
     puts Andrake::Hybrid.new.info
+  end
+
+  def build_help
+    <<doco
+Usage: #{ script_name } build
+
+  Summary:
+    build the current Android application
+  end
+doco
+  end
+  def build
+    Andrake::Hybrid.new.build
   end
 
 end

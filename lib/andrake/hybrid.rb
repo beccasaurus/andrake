@@ -31,13 +31,19 @@ class Andrake::Hybrid
 Android Application information:
 
   name: #{ name }
+  main_activity: #{ android_app.main_activity.name }
+  package: #{ android_app.main_activity.package }
   #{classes.length} classes: #{classes.map(&:name).join(', ')}
   #{activities.length} activities: #{activities.map(&:name).join(', ')}
   #{layouts.length} layouts: #{layouts.map(&:name).join(', ')}
-  APK: #{apk_file}
 #{ resource_string }
+  misc resources: #{ andrake_app.misc_resources.join(', ') }
 
 ]
+  end
+
+  def build
+    andrake_app.build
   end
 
   def method_missing name, *args

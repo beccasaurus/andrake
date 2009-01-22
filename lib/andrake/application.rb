@@ -11,6 +11,14 @@ class Andrake::Application
     load_xml_resources
   end
 
+  # resource directories that are NOT layouts or values
+  def misc_resources
+    misc = Dir[ File.join(root, 'res', '*') ]
+    misc = misc.map {|dir| File.basename dir }
+    misc = misc - %w( values value layout layouts )
+    misc
+  end
+
   # meh
   def delete_android_app
     FileUtils.rm_r path('.app') if File.directory? path('.app')
@@ -22,7 +30,6 @@ class Andrake::Application
       require 'hpricot'
       require 'activesupport'
       Dir[ File.join(values, '**', '*.xml' ) ].each do |xml_resource_file|
-        puts "resource file: #{ xml_resource_file }"
         doc = Hpricot(File.read(xml_resource_file))
         resource_node = ( doc / 'resources' )[0]
         resource_node.children.each do |node|
@@ -113,6 +120,8 @@ class Andrake::Application
 
   # build or 'compile' the Andrake app down to a 'typical' Android app
   def build
+    raise "You can't build an automatically generated .app directory!" if File.basename(File.dirname(path('.'))) == '.app'
+
     puts "Building #{name} ..."
     require 'fileutils'
     if File.directory? path('.app')
@@ -123,29 +132,44 @@ class Andrake::Application
     FileUtils.mkdir path('.app')
     FileUtils.mkdir path('.app', 'bin')
     FileUtils.mkdir path('.app', 'libs')
-    File.open( path('.app', 'AndroidManifest.xml'), 'w') {|f| f << manifest_xml }
+
+    if File.file? path('AndroidManifest.xml')
+      FileUtils.cp path('AndroidManifest.xml'), path('.app', 'AndroidManifest.xml')
+    else
+      File.open( path('.app', 'AndroidManifest.xml'), 'w') {|f| f << manifest_xml }
+    end
 
     FileUtils.mkdir path('.app', 'res') # should dynamically create the directories under res ...
     FileUtils.mkdir path('.app', 'res', 'values')
 
     File.open( path('.app', 'res', 'values', 'values.xml'), 'w') {|f| f << resources.to_xml }
 
+    if misc_resources
+      misc_resources.each do |misc_resource_dirname|
+        FileUtils.cp_r path('res', misc_resource_dirname), path('.app', 'res', misc_resource_dirname)
+      end
+    end
+
     # for now, just copy layout files ...
     if File.directory? path('layout')
       FileUtils.cp_r path('layout'), path('.app', 'res', 'layout')
     end
-
-    FileUtils.mkdir path('.app', 'src')
-    FileUtils.mkdir path('.app', 'src', 'com')
-    FileUtils.mkdir path('.app', 'src', 'com', 'andrake_testing')
-    FileUtils.mkdir path('.app', 'src', 'com', 'andrake_testing', name.downcase)
-
-    activities.each do |activity|
-      File.open( path('.app', 'src', 'com', 'andrake_testing', 
-                      name.downcase, "#{activity.name}.java"), 'w' ) do |f|
-        f << activity.source
-                      end
+    if File.directory? path('res', 'layout')
+      FileUtils.cp_r path('res', 'layout'), path('.app', 'res', 'layout')
     end
+
+    classes.each do |klass|
+      package_path = path( '.app', 'src', *(klass.package_name.split('.')) )
+      FileUtils.mkdir_p package_path
+      FileUtils.cp klass.file_path, File.join(package_path, "#{ klass.name }.java")
+    end
+
+    #activities.each do |activity|
+    #  File.open( path('.app', 'src', 'com', 'andrake_testing', 
+    #                  name.downcase, "#{activity.name}.java"), 'w' ) do |f|
+    #    f << activity.source
+    #                  end
+    #end
 
     # finally, for now, let's copy over andrake/res to the directory
     # so we get an Ant script and stuff like that
@@ -153,7 +177,7 @@ class Andrake::Application
       FileUtils.cp static_resource, path('.app', File.basename(static_resource))
     end
 
-    android_app.build
+    puts "BUILD: #{ android_app.build.inspect }"
     android_app
   end
 
