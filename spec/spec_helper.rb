@@ -3,15 +3,6 @@ require File.join(root, 'lib', 'android')
 require File.join(root, 'lib', 'andrake')
 require 'spec'
 
-class Array
-  def directories
-    select {|x| File.directory? x }
-  end
-  def files
-    select {|x| File.file? x }
-  end
-end
-
 Spec::Runner.configure do |config|
 
   # Spec Helper methods

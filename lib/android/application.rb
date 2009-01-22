@@ -17,6 +17,12 @@ class Android::Application
   end
 
   # returns an Array of all of this Application's
+  # .xml layout files (Android::Layout)
+  def layouts
+    Android::Layout.find_all root
+  end
+
+  # returns an Array of all of this Application's
   # .java classes that are activities (Android::Activity)
   def activities
     classes_by_type Android::Activity

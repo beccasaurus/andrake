@@ -31,7 +31,11 @@ describe Android, 'HelloAndroid' do
     @app.activities.first.package.should == 'com.android.hello'
   end
 
-  it 'should have 1 layout'
+  it 'should have 1 layout' do
+    @app.layouts.length.should == 1
+    @app.layouts.first.should be_a_kind_of(Android::Layout)
+    @app.layouts.first.file_name.should == 'main.xml'
+  end
 
   it 'should have string values'
 
