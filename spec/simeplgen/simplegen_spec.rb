@@ -77,11 +77,10 @@ describe SimpleGen do
     SimpleGen[:app].files.first.filename_without_extension.should == 'foo'
     SimpleGen[:app].files.first.nonfilter_extensions.should == ['xml']
     SimpleGen[:app].files.first.filter_extensions.should == ['_erb']
-    #SimpleGen[:app].files.first.
 
-    #SimpleGen[:app].files.first.filters.length.should == 1
-    #SimpleGen[:app].files.first.filters.first.should be_a_kind_of(SimpleGen::Filter)
-    #SimpleGen[:app].files.first.filters.first.name.downcase.should == 'erb'
+    SimpleGen[:app].files.first.source.should == "hello from <%= @var %>\n"
+    SimpleGen[:app].files.first.render.should == "hello from \n" # missing variable
+    SimpleGen[:app].files.first.render(:var => 5).should == "hello from 5\n"
   end
 
 end

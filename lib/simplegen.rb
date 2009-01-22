@@ -130,6 +130,30 @@ class SimpleGen::Template::File
       (filename_without_extension + '.' + nonfilter_extensions.join('.'))
   end
 
+  def filters
+    filter_extensions.map {|x| SimpleGen.get_filter x }
+  end
+
+  def source
+    File.read path
+  end
+
+  def render variables = { }
+    _current_simplegen_template_file_output = source
+    
+    # put variables into binding, as instance variables (so they don't raise exceptions with missing)
+    b = binding
+    variables.each do |k, v|
+      eval "@#{k} = #{v}", b
+    end
+
+    filters.each do |filter|
+      _current_simplegen_template_file_output = filter.call(_current_simplegen_template_file_output, b)
+    end
+
+    _current_simplegen_template_file_output
+  end
+
 end
 
 # move to 'simplegen/filter.rb'
