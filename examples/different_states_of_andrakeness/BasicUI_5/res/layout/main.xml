@@ -1,0 +1,21 @@
+<LinearLayout
+    android:orientation="vertical"
+    layout_width="fill_parent"
+    layout_height="fill_parent"
+    >
+<TextView  
+    layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    text="@string/hello"
+    />
+<TextView  
+    layout_width="fill_parent" 
+    layout_height="wrap_content" 
+    text="@string/externalized_string"
+    textColor="@color/red"
+    id="@+id/txt"
+    />
+<Button layout_width="100px"
+    layout_height="wrap_content" text="Click Me"
+    id="my_button" /> 
+</LinearLayout>

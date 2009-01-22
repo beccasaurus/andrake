@@ -13,9 +13,21 @@ class Android::Layout
   alias name file_name
 
   def render stylesheets
-    layout_xml = File.read file_path
+    layout_xml = get_xml
     layout_xml = apply_css(layout_xml, stylesheets)
     layout_xml = androidify_xml_attributes(layout_xml)
+  end
+
+  # get the xml for the layout ... if not .xml, we have to convert -> xml
+  def get_xml
+    if file_path[/\.xml$/]
+      File.read file_path
+    elsif file_path[/\.haml$/]
+      require 'haml'
+      Haml::Engine.new(File.read(file_path)).to_html
+    else
+      raise "Don't know how to get XML for #{ file_path }"
+    end
   end
 
   def read_css_file css_file
