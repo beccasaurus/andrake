@@ -59,13 +59,32 @@ class SimpleGen::Template
     ::File.basename root
   end
 
+  # THESE SHOULD BE private/protected
+  # handles support for %var% in file and directory names
+  def render_dynamic_path path, variables = { }
+    path.gsub(/%(\w+)%/){|match|
+      match_without_percentage_signs = match.gsub('%','') # can't seem to find a way to just get the (\w+)
+      replace_dynamic_path_variables(match_without_percentage_signs, variables)
+    }
+  end
+  def replace_dynamic_path_variables match, variables = { }
+    replace_with = variables[match.to_s]
+    if replace_with.nil? and not match.to_s.empty?
+      replace_with = variables[match.to_s.to_sym] # try using a symbol
+    end
+    replace_with.to_s
+  end
+
   def generate! root_path_for_generation = '.', variables = { }
-    puts "generate! #{ root_path_for_generation }"
     files.each do |file|
       relative_file_path = file.path.sub(root, '') # relative to the template
       relative_dirname   = ::File.dirname  relative_file_path
       dir_to_render_in   = ::File.join root_path_for_generation, relative_dirname
       file_to_render_in  = ::File.join dir_to_render_in, file.filename_to_generate
+
+      # support %var% in file and directory names
+      dir_to_render_in   = render_dynamic_path(dir_to_render_in,  variables)
+      file_to_render_in  = render_dynamic_path(file_to_render_in, variables)
 
       # puts "relative_file_path => #{ relative_file_path }"
       # puts "dir_to_render_in   => #{ dir_to_render_in }"

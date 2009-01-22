@@ -60,6 +60,19 @@ describe SimpleGen do
     File.read(File.join(generation_path, 'foo.xml')).should include('hello from RUBY VARIABLE')
   end
 
+  it 'should generate empty directories OK'
+
+  it 'should support dynamic directory naming' # make it create multiple dirs
+
+  it 'should suppor dynamic file naming' do
+    clean_tmp_dir
+    SimpleGen.template_directories << template_dir # template-dir1
+    File.exist?(File.join(generation_path, 'hello_there_file.rb')).should be_false
+    SimpleGen[:dynamic_filename].generate! generation_path, :dynamic => 'hello_there'
+    File.exist?(File.join(generation_path, 'hello_there_file.rb')).should be_true
+    File.read(File.join(generation_path, 'hello_there_file.rb')).should include('my name should be hello_there_file.rb')
+  end
+
   it "should generate template/with/many/dirs/... correctly" do
     # many_dirs => many/dirs/hello.txt.erb
     clean_tmp_dir
