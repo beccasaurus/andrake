@@ -93,6 +93,12 @@ class SimpleGen::Template
       FileUtils.mkdir_p dir_to_render_in
       ::File.open( file_to_render_in, 'w' ) {|f| f << file.render(variables) }
     end
+
+    # make any directories that haven't been created (empty directories)
+    directories.each do |dir|
+      relative_dir_path = ::File.join root_path_for_generation, dir.sub(root, '')
+      FileUtils.mkdir_p relative_dir_path unless ::File.directory? relative_dir_path
+    end
   end
 
   # returns an Array of files (SimpleGen::Template::File)

@@ -60,7 +60,13 @@ describe SimpleGen do
     File.read(File.join(generation_path, 'foo.xml')).should include('hello from RUBY VARIABLE')
   end
 
-  it 'should generate empty directories OK'
+  it 'should generate empty directories OK' do
+    clean_tmp_dir
+    SimpleGen.template_directories << template_dir # template-dir1
+    File.exist?(File.join(generation_path, 'empty_dir')).should be_false
+    SimpleGen[:empty_dirs].generate! generation_path
+    File.exist?(File.join(generation_path, 'empty_dir')).should be_true
+  end
 
   it 'should support dynamic directory naming' do
     clean_tmp_dir
