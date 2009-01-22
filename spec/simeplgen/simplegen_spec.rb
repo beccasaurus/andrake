@@ -61,12 +61,24 @@ describe SimpleGen do
   end
 
   it 'should know how to render a file ... and we should have SimpleGen::Filters' do
-    #SimpleGen.template_directories << template_dir # template-dir1
-    #SimpleGen[:app].files.should_not be_empty
-    #SimpleGen[:app].files.first.should be_a_kind_of(SimpleGen::Template::File)
-    #SimpleGen[:app].files.first.filename.should == 'foo.xml._erb'
-    #SimpleGen[:app].files.first.path.should include('app/foo.xml.erb')
-    #SimpleGen[:app].files.first.filename_to_generate.should == 'foo.xml'
+    SimpleGen.template_directories << template_dir # template-dir1
+    SimpleGen[:app].files.should_not be_empty
+    SimpleGen[:app].files.first.should be_a_kind_of(SimpleGen::Template::File)
+
+    SimpleGen.filter_exists?(:erb).should be_true
+    SimpleGen.filter_exists?('erb').should be_true
+    SimpleGen.filter_exists?(:_erb).should be_true
+    SimpleGen.filter_exists?('_erb').should be_true
+    
+    SimpleGen[:app].files.first.filename.should == 'foo.xml._erb'
+    SimpleGen[:app].files.first.path.should include('app/foo.xml._erb')
+    SimpleGen[:app].files.first.basename.should == 'foo.xml._erb'
+    SimpleGen[:app].files.first.extensions.should == ['xml', '_erb']
+    SimpleGen[:app].files.first.filename_without_extension.should == 'foo'
+    SimpleGen[:app].files.first.nonfilter_extensions.should == ['xml']
+    SimpleGen[:app].files.first.filter_extensions.should == ['_erb']
+    #SimpleGen[:app].files.first.
+
     #SimpleGen[:app].files.first.filters.length.should == 1
     #SimpleGen[:app].files.first.filters.first.should be_a_kind_of(SimpleGen::Filter)
     #SimpleGen[:app].files.first.filters.first.name.downcase.should == 'erb'
