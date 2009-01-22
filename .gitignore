@@ -1,8 +1,8 @@
-*.dex
-*.class
-*.apk
-*.zip
-*.bak
-*.swp
+bin
 
-.app
+*.ap_
+*.apk
+*.class
+*.dex
+*.swp
+*.zip
