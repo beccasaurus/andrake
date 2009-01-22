@@ -59,6 +59,7 @@ class Android::Application
   def build
     puts "Building #{name}"
     write_build_xml_template
+    check_build_dependencies
     require 'open3'
     build_command = %{cd '#{root}' && ant}
     @build_output = Open3.popen3 build_command
@@ -98,6 +99,7 @@ APK: #{apk_file}
     package = main_activity.package_name # TODO need to actually figure out which 
     cmd = "adb shell am start -n #{package}/#{package}.#{main_activity.name}"
     puts cmd
+    make_sure_a_device_is_present
     puts `#{cmd}`
   end
 
@@ -106,6 +108,7 @@ APK: #{apk_file}
     build
     cmd = "adb install '#{apk_file}'" if apk_file
     puts cmd
+    make_sure_a_device_is_present
     puts `#{cmd}`
   end
 
@@ -115,6 +118,7 @@ APK: #{apk_file}
     FileUtils.rm_r bin_dir if File.directory? bin_dir
     cmd = "adb uninstall #{ main_activity.package }"
     puts cmd
+    make_sure_a_device_is_present
     puts `#{cmd}`
   end
 
@@ -137,6 +141,13 @@ APK: #{apk_file}
 
   protected
 
+  # makes sure that all of the dependencies needed to build this 
+  # Android Application are present
+  def check_build_dependencies
+    libs = File.join root, 'libs'
+    FileUtils.mkdir libs unless File.directory? libs
+  end
+
   # creates a build.xml Ant script in this Application's root directory
   def write_build_xml_template
     build_xml = File.join root, 'build.xml'
@@ -152,6 +163,14 @@ APK: #{apk_file}
   # .java classes that match the given type, eg: Android::Activity
   def classes_by_type type
     classes.select {|klass| klass.is_a? type }
+  end
+
+  # if no device is present, start up an emulator
+  def make_sure_a_device_is_present
+    unless Android.devices.length > 0
+      require 'open3'
+      Open3.popen3 'emulator'
+    end
   end
 
 end

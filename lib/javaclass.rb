@@ -8,7 +8,13 @@ class JavaClass
   end
 
   def class_name
-    /public .*class (\w+)/.match(source_sans_comments).captures.first
+    match = /public .*class (\w+)/.match(source_sans_comments)
+    if match
+      match.captures.first
+    else
+      match = /class (\w+)/.match(source_sans_comments)
+      match.captures.first if match
+    end
   end
   alias name class_name
 
