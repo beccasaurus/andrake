@@ -97,7 +97,7 @@ APK: #{apk_file}
   # runs this Android application (on the default device)
   def run
     package = main_activity.package_name # TODO need to actually figure out which 
-    cmd = "adb shell am start -n #{package}/#{package}.#{main_activity.name}"
+    cmd = "cd '#{root}' && adb shell am start -n #{package}/#{package}.#{main_activity.name}"
     puts cmd
     make_sure_a_device_is_present
     puts `#{cmd}`
@@ -106,7 +106,7 @@ APK: #{apk_file}
   # installs this Android application (on the default device)
   def install
     build
-    cmd = "adb install '#{apk_file}'" if apk_file
+    cmd = "cd '#{root}' && adb install '#{apk_file}'" if apk_file
     puts cmd
     make_sure_a_device_is_present
     puts `#{cmd}`
@@ -116,7 +116,7 @@ APK: #{apk_file}
   def uninstall
     bin_dir = File.join root, 'bin'
     FileUtils.rm_r bin_dir if File.directory? bin_dir
-    cmd = "adb uninstall #{ main_activity.package }"
+    cmd = "cd '#{root}' && adb uninstall #{ main_activity.package }"
     puts cmd
     make_sure_a_device_is_present
     puts `#{cmd}`

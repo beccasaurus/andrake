@@ -50,4 +50,17 @@ doco
     Andrake::Hybrid.new.build
   end
 
+  def emulate_help
+    <<doco
+Usage: #{ script_name } emulate
+
+  Summary:
+    run the current Android application in the emulator
+  end
+doco
+  end
+  def emulate
+    Andrake::Hybrid.new.build_and_run
+  end
+
 end

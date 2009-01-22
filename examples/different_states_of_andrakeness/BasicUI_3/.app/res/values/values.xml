@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="blue">#0000ff</color>
-  <color name="green">#f0f0</color>
   <color name="yellow">#ffffff00</color>
   <color name="white">#ffffff</color>
   <color name="red">#f00</color>
-  <string name="app_name">Basic UI</string>
+  <color name="blue">#0000ff</color>
+  <color name="green">#f0f0</color>
   <string name="externalized_string">Externalized String</string>
   <string name="hello">Hello World, BasicUI</string>
+  <string name="app_name">Basic UI</string>
 </resources>

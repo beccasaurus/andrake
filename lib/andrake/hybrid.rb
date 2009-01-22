@@ -46,6 +46,24 @@ Android Application information:
     andrake_app.build
   end
 
+  def build_and_run
+    build
+    reinstall_and_run
+  end
+
+  def reinstall
+    Android::Application.new( File.join(root, '.app') ).reinstall
+  end
+
+  def reinstall_and_run
+    reinstall
+    run
+  end
+
+  def run
+    Android::Application.new( File.join(root, '.app') ).run
+  end
+
   def method_missing name, *args
     android_app.send name, *args
   end
