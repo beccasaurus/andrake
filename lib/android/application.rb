@@ -57,6 +57,7 @@ class Android::Application
   # returns false if the APK wasn't properly created
   #
   def build
+    puts "Building #{name}"
     write_build_xml_template
     require 'open3'
     build_command = %{cd '#{root}' && ant}
@@ -102,6 +103,7 @@ APK: #{apk_file}
 
   # installs this Android application (on the default device)
   def install
+    build
     cmd = "adb install '#{apk_file}'" if apk_file
     puts cmd
     puts `#{cmd}`
@@ -109,6 +111,8 @@ APK: #{apk_file}
 
   # uninstalls this Android application (on the default device)
   def uninstall
+    bin_dir = File.join root, 'bin'
+    FileUtils.rm_r bin_dir if File.directory? bin_dir
     cmd = "adb uninstall #{ main_activity.package }"
     puts cmd
     puts `#{cmd}`
