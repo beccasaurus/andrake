@@ -1,6 +1,0 @@
-#! /bin/bash
-adb uninstall com.andrake_testing.helloandroid
-rm -rv bin
-ant
-adb install bin/AndroidSansEclipse-debug.apk
-adb shell am start -n com.andrake_testing.helloandroid/com.andrake_testing.helloandroid.AndroidSansEclipse
