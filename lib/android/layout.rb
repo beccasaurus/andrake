@@ -12,7 +12,7 @@ class Android::Layout
   end
 
   def self.find_all directory
-    # find directories with 'layout' in the name
+    # find directories with 'layout' in the name ... really, we should just do directly to res/layout
     Dir[ File.join(directory, '**', '*layout*') ].directories.inject([]) do |layouts, dir|
       layout_xml_files = Dir[ File.join(dir, '**', '*.xml') ]
       layouts += layout_xml_files.map { |file_path| Android::Layout.new file_path }

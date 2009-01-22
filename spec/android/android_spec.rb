@@ -8,4 +8,8 @@ describe Android do
     1.should == 1
   end
 
+  it 'should have custom matchers' do
+    5.should_not build_ok
+  end
+
 end

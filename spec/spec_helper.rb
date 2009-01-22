@@ -2,6 +2,7 @@ root = File.dirname(__FILE__) + '/../'
 require File.join(root, 'lib', 'android')
 require File.join(root, 'lib', 'andrake')
 require 'spec'
+require File.dirname(__FILE__) + '/custom_matcher'
 
 Spec::Runner.configure do |config|
 
@@ -39,6 +40,12 @@ Spec::Runner.configure do |config|
     %w( root example_dir examples android_examples andrake_examples ).each do |method|
       puts "#{method} => #{send(method).inspect}"
     end
+  end
+
+  # Matchers
+  
+  matcher(:build_ok) do |app|
+    false
   end
 
 end
