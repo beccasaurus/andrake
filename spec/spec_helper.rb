@@ -45,7 +45,7 @@ Spec::Runner.configure do |config|
   # Matchers
   
   matcher(:build_ok) do |app|
-    false
+    app.build.should == true
   end
 
 end

@@ -28,10 +28,9 @@ describe Andrake, 'HelloAndroid' do
 
   it 'should build a Android::Application' do
     @app.android_app.should be_nil
-    android_app = @app.build
+    @app.build.should == true # .build now returns a bool for whether the build was successful
     @app.android_app.should_not be_nil
-    @app.android_app.should == android_app
-    android_app.apk_file.should_not be_nil
+    @app.android_app.apk_file.should_not be_nil
   end
 
 end

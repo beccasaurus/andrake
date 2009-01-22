@@ -194,8 +194,9 @@ class Andrake::Application
       FileUtils.cp static_resource, path('.app', File.basename(static_resource))
     end
 
-    puts "BUILD: #{ android_app.build.inspect }"
-    android_app
+    built_ok = android_app.build
+    puts "BUILD: #{ built_ok.inspect }"
+    built_ok
   end
 
 end
