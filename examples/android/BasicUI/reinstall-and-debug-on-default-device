@@ -1,0 +1,6 @@
+#! /bin/bash
+adb uninstall com.android.basicui
+rm -rv bin
+ant
+adb install bin/AndroidSansEclipse-debug.apk
+adb shell am start -D -n com.android.basicui/com.android.basicui.BasicUI
