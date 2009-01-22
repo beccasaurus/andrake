@@ -37,11 +37,11 @@ Spec::Runner.configure do |config|
   end
 
   def android_example name
-    File.join example_dir, 'android', name
+    File.join example_dir, 'android', name.to_s
   end
 
   def andrake_example name
-    File.join example_dir, 'andrake', name
+    File.join example_dir, 'andrake', name.to_s
   end
 
   def print_spec_helpers
