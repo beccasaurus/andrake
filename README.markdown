@@ -1,1 +1,3 @@
 install instructions, etc, coming soon!
+
+requires Ruby, RubyGems, and some gems ...
