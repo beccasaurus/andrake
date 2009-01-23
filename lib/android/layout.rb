@@ -91,6 +91,14 @@ class Android::Layout
           end
         end
 
+        # if there's innerText and no text attribute, innerText => text
+        if e.respond_to?:inner_text
+          unless e.inner_text.strip.empty? or e.attributes.keys.include?'text'
+            # e.set_attribute 'text', e.inner_text.strip
+            # e.inner_text = '' # no way to easily get rid of it?  :/
+          end
+        end
+
         # fix attributes (prepend 'android:')
         e.attributes.each do |k, v|
           unless k.include?':'
