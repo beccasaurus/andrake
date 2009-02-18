@@ -7,3 +7,5 @@ bin
 *.dex
 *.swp
 *.zip
+
+pkg
