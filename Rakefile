@@ -12,9 +12,9 @@ begin
     s.homepage    = "http://github.com/remi/andrake"
     s.description = "A collection of Rake/Ruby tools/libraries for making Android development easier and more enjoyable"
     s.authors     = %w( remi )
-    s.files       = FileList["[A-Z]*", "{lib,spec,examples,rails_generators}/**/*"] 
-    # s.executables = "neato"
-    # s.add_dependency 'person-project'
+    s.files       = FileList["[A-Z]*", "{bin,lib,spec,examples,rails_generators,templates}/**/*"] 
+    s.executables = "andrake"
+    s.add_dependency 'remi-simplecli'
   end
 rescue LoadError
   puts "Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"

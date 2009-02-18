@@ -13,8 +13,9 @@ class Andrake::Bin
       andrake command [options]
 
     Examples:
-      andrake info
-      andrake build
+      andrake info             # prints app info
+      andrake build            # build app
+      andrake emulate          # run app in emulator
 
     Further help:
       andrake commands         # list all available commands
