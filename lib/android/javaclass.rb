@@ -15,9 +15,13 @@ class Android::JavaClass < JavaClass
       # if a the .java class 'extends Foo' and there's a class called 
       # Android::Foo, we initialize an Android::Foo, else we initialize
       # a generic Android::JavaClass
-      if java.superclass && Android.const_defined?(java.superclass.to_sym)
-        Android.const_get(java.superclass).new file_path
-      else
+      begin
+        if java.superclass && Android.const_defined?(java.superclass.to_sym)
+          Android.const_get(java.superclass).new file_path
+        else
+          Android::JavaClass.new file_path
+        end
+      rescue NameError
         Android::JavaClass.new file_path
       end
     end

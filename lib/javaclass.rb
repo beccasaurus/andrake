@@ -10,21 +10,23 @@ class JavaClass
   def class_name
     match = /public .*class (\w+)/.match(source_sans_comments)
     if match
-      match.captures.first
+      return match.captures.first
     else
       match = /class (\w+)/.match(source_sans_comments)
-      match.captures.first if match
+      return match.captures.first if match
     end
+    return /public .* (\w+)/.match(source_sans_comments).captures.first
   end
   alias name class_name
 
   def package_name
-    /package (.*);/.match(source_sans_comments).captures.first
+    match = /package (.*);/.match(source_sans_comments)
+    if match then match.captures.first else nil end
   end
   alias package package_name
 
   def super_class
-    match = /public .*class \w+ extends (\w+)/.match(source_sans_comments)
+    match = /public .*class \w+ extends ([\w\.]+)/.match(source_sans_comments)
     if match then match.captures.first else nil end
   end
   alias superclass super_class
