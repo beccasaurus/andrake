@@ -1,6 +1,6 @@
 class Andrake::Application
 
-  attr_accessor :root, :name, :activities, :resources
+  attr_accessor :root, :name, :activities, :resources, :permissions
 
   def initialize root_directory
     @root = root_directory
@@ -95,6 +95,14 @@ class Andrake::Application
                       'package' => main_activity.package.downcase,
                       'android:versionCode' => '1',
                       'android:versionName' => '1.0.0' do |man|
+
+      # <uses-permission android:name="android.permission.INTERNET" />
+      if @permissions and not @permissions.empty?
+        @permissions.each do |permission|
+          man.tag! 'uses-permission', 'android:name' => "android.permission.#{ permission.to_s.upcase }"
+        end
+      end
+
       man.application 'android:label' => '@string/app_name' do |app|
         activities.each do |activity|
 
@@ -121,6 +129,15 @@ class Andrake::Application
     @resources ||= Andrake::ResourceManager.new
     yield(@resources) if block_given?
     @resources
+  end
+
+  # set some permissions, eg.
+  #
+  #   permissions :internet, :access_fine_location
+  #
+  def permissions *args
+    @permissions ||= []
+    @permissions += args
   end
 
   def main_activity
