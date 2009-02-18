@@ -1,8 +1,8 @@
 <?xml version="1.0" ?>
 <project name="<%= @app.name %>" default="debug">
     <!-- SDK Locations -->
-    <property name="sdk-folder" value="/home/remi/downloads/android-sdk-linux_x86-1.0_r1" />
-    <property name="android-tools" value="/home/remi/downloads/android-sdk-linux_x86-1.0_r1/tools" />
+    <property name="sdk-folder" value="<%= @sdk_dir %>" />
+    <property name="android-tools" value="<%= @tools_dir %>" />
     
     <!-- Application Package Name -->
     <property name="application-package" value="com.android.helloagain" />

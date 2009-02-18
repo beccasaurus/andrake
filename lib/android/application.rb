@@ -172,7 +172,12 @@ APK: #{apk_file}
     unless File.file? build_xml
       require 'erb'
       template = File.read File.join(Android.gem_root, 'templates', 'build.xml.erb')
-      rendered = ERB.new(template).result(proc { @app = self; proc{}}.call)
+      rendered = ERB.new(template).result(proc { 
+        @app = self
+        @tools_dir = File.dirname(`which aapt`.strip)
+        @sdk_dir   = @tools_dir.sub(/\/tools$/,'')
+        proc{}
+      }.call)
       File.open(build_xml, 'w'){|f| f << rendered }
     end
   end
